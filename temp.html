@@ -1,188 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <meta charset="UTF-8">
-   <title>AfricaCERT Vulnerability Report</title>
-
+    <meta charset="UTF-8">
+    <title>AfricaCERT Vulnerability Report</title>
     <style>
-        /* General styling for text and layout */
-        html, body {
-            font-family: sans-serif;
-            line-height: 1.15;
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.5;
             margin: 0;
             padding: 0;
             background-color: #fff;
         }
-        h1 {
-            border-bottom: 1px solid gray;
-            font-size: 24px;
-        }
-        /* Container layout */
+
         .container {
             width: 100%;
-            max-width: 960px;
-            margin: auto;
-            padding: 15px;
+            padding: 20px;
         }
-        /* Table and checkbox styling */
-        .table {
+
+        .header-table, .info-table, .details-table, .footer-table {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 20px;
         }
-        .table th, .table td {
-            padding: 0.75rem;
-            border: 1px solid #dee2e6;
+
+        .header-table td {
+            vertical-align: middle;
         }
-        .checkbox-button__control {
-            width: 12px;
-            height: 12px;
-            border: 1px solid gray;
-            display: inline-block;
-            margin-right: 5px;
+
+        .title {
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
         }
-        /* AfricaCERT-specific styling */
+
         .africacert-logo {
             width: 100px;
         }
-        .title {
-            text-align: center;
-            font-size: 20px;
-            font-weight: 700;
+
+        .table th, .table td {
+            border: 1px solid #000;
+            padding: 8px;
         }
+
         .table th {
             background-color: #4CAF50;
             color: white;
         }
+
+        .checkbox {
+            width: 10px;
+            height: 10px;
+            border: 1px solid black;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
         .cvss {
             color: red;
-            font-weight: 700;
+            font-weight: bold;
+        }
+
+        .footer-text {
+            text-align: center;
+            font-size: 10px;
+            color: #666;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Header Section -->
-        <div>
-            <table class="table">
-                <tr>
-                    <td class="w20">
-                        <!-- AfricaCERT Logo -->
-                        <svg width="300" height="50" xmlns="http://www.w3.org/2000/svg">
-                            <text x="10" y="40" font-family="Arial" font-size="36" fill="#FFD700">AfricaCERT</text>
-                        </svg>
-                          
-                    </td>
-                    <td class="title">AfricaCERT Vulnerability Report</td>
-                    <td class="w20 number">{{ data.product.title }}</td>
-                </tr>
-            </table>
-            <br>
-        </div>
+        <table class="header-table">
+            <tr>
+                <td><img class="africacert-logo" src="{{ logo_path }}" alt="AfricaCERT Logo"></td>
+                <td class="title">AfricaCERT Vulnerability Report</td>
+                <td>{{ data.product.title }}</td>
+            </tr>
+        </table>
 
         <!-- Report Details -->
-        <div>
-            {% for report_item in data.report_items %}
-            <h2>{{ report_item.name | e }}</h2>
+        {% for report_item in data.report_items %}
+        <h2>{{ report_item.name }}</h2>
 
-            <table class="table">
-                <tr>
-                    <td class="w25">Confidentiality</td>
-                    <td class="w15">
-                        <label class="checkbox-button">
-                            <input type="checkbox" class="checkbox-button__input" {% if report_item.attrs.confidentiality == 'UNRESTRICTED' %}checked{% endif %}>
-                            <span class="checkbox-button__control"></span>
-                            Unrestricted
-                        </label>
-                    </td>
-                    <td class="w15">
-                        <label class="checkbox-button">
-                            <input type="checkbox" class="checkbox-button__input" {% if report_item.attrs.confidentiality == 'CLASSIFIED' %}checked{% endif %}>
-                            <span class="checkbox-button__control"></span>
-                            Classified
-                        </label>
-                    </td>
-                    <td class="w15">
-                        <label class="checkbox-button">
-                            <input type="checkbox" class="checkbox-button__input" {% if report_item.attrs.confidentiality == 'CONFIDENTIAL' %}checked{% endif %}>
-                            <span class="checkbox-button__control"></span>
-                            Confidential
-                        </label>
-                    </td>
-                    <td class="w15">
-                        <label class="checkbox-button">
-                            <input type="checkbox" class="checkbox-button__input" {% if report_item.attrs.confidentiality == 'SECRET' %}checked{% endif %}>
-                            <span class="checkbox-button__control"></span>
-                            Secret
-                        </label>
-                    </td>
-                    <td class="w15">
-                        <label class="checkbox-button">
-                            <input type="checkbox" class="checkbox-button__input" {% if report_item.attrs.confidentiality == 'TOP SECRET' %}checked{% endif %}>
-                            <span class="checkbox-button__control"></span>
-                            Top Secret
-                        </label>
-                    </td>
-                </tr>
+        <!-- Confidentiality Section -->
+        <table class="info-table">
+            <tr>
+                <td>Confidentiality</td>
+                <td><div class="checkbox">{% if report_item.attrs.confidentiality == 'UNRESTRICTED' %}&#10003;{% endif %}</div> Unrestricted</td>
+                <td><div class="checkbox">{% if report_item.attrs.confidentiality == 'CLASSIFIED' %}&#10003;{% endif %}</div> Classified</td>
+                <td><div class="checkbox">{% if report_item.attrs.confidentiality == 'CONFIDENTIAL' %}&#10003;{% endif %}</div> Confidential</td>
+                <td><div class="checkbox">{% if report_item.attrs.confidentiality == 'SECRET' %}&#10003;{% endif %}</div> Secret</td>
+                <td><div class="checkbox">{% if report_item.attrs.confidentiality == 'TOP SECRET' %}&#10003;{% endif %}</div> Top Secret</td>
+            </tr>
+        </table>
 
-                <!-- Traffic Light Protocol (TLP) -->
-                <tr>
-                    <td>TLP</td>
-                    <td colspan="5">
-                        {% if report_item.attrs.tlp == 'CLEAR' or report_item.attrs.tlp == 'WHITE' %}
-                        <span style="padding: 4px; background-color: black; color: white; font-weight: 700">TLP:CLEAR</span>
-                        {% elif report_item.attrs.tlp == 'GREEN' %}
-                        <span style="padding: 4px; background-color: black; color: #33ff00; font-weight: 700">TLP:GREEN</span>
-                        {% elif report_item.attrs.tlp == 'AMBER' %}
-                        <span style="padding: 4px; background-color: black; color: #ffc000; font-weight: 700">TLP:AMBER</span>
-                        {% elif report_item.attrs.tlp == 'RED' %}
-                        <span style="padding: 4px; background-color: black; color: #ff2b2b; font-weight: 700">TLP:RED</span>
-                        {% endif %}
-                    </td>
-                </tr>
+        <!-- TLP Section -->
+        <table class="info-table">
+            <tr>
+                <td>TLP</td>
+                <td colspan="5">
+                    {% if report_item.attrs.tlp == 'CLEAR' %}
+                    <span style="background-color: black; color: white; padding: 5px;">TLP:CLEAR</span>
+                    {% elif report_item.attrs.tlp == 'GREEN' %}
+                    <span style="background-color: green; color: white; padding: 5px;">TLP:GREEN</span>
+                    {% elif report_item.attrs.tlp == 'AMBER' %}
+                    <span style="background-color: orange; color: white; padding: 5px;">TLP:AMBER</span>
+                    {% elif report_item.attrs.tlp == 'RED' %}
+                    <span style="background-color: red; color: white; padding: 5px;">TLP:RED</span>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
 
-                <!-- CVSS Score -->
-                <tr>
-                    <td>CVSS Vector</td>
-                    <td colspan="5">
-                        <span class="cvss">{{ report_item.attrs.cvss | e }}</span>
-                    </td>
-                </tr>
-            </table>
+        <!-- CVSS Score -->
+        <table class="info-table">
+            <tr>
+                <td>CVSS Vector</td>
+                <td colspan="5"><span class="cvss">{{ report_item.attrs.cvss }}</span></td>
+            </tr>
+        </table>
 
-            <!-- Vulnerability Details Section -->
-            <table class="table">
-                <tr><th>Description</th></tr>
-                <tr><td>{{ report_item.attrs.description | e }}</td></tr>
-            </table>
+        <!-- Description -->
+        <table class="details-table">
+            <tr><th>Description</th></tr>
+            <tr><td>{{ report_item.attrs.description }}</td></tr>
+        </table>
 
-            <table class="table">
-                <tr><th>Exposure Date</th></tr>
-                <tr><td>{{ report_item.attrs.exposure_date }}</td></tr>
-            </table>
+        <!-- Exposure and Update Dates -->
+        <table class="details-table">
+            <tr><th>Exposure Date</th><td>{{ report_item.attrs.exposure_date }}</td></tr>
+            <tr><th>Update Date</th><td>{{ report_item.attrs.update_date }}</td></tr>
+        </table>
 
-            <table class="table">
-                <tr><th>Update Date</th></tr>
-                <tr><td>{{ report_item.attrs.update_date }}</td></tr>
-            </table>
+        <!-- CVE -->
+        <table class="details-table">
+            <tr><th>CVE</th><td>{{ report_item.attrs.cve[0] }}</td></tr>
+        </table>
 
-            <table class="table">
-                <tr><th>CVE</th></tr>
-                <tr><td>{{ report_item.attrs.cve[0] | e }}</td></tr>
-            </table>
-
-            <table class="table">
-                <tr><th>Impact</th></tr>
-                <tr><td>{{ report_item.attrs.impact | e }}</td></tr>
-            </table>
-
-            <br>
-            {% endfor %}
-        </div>
+        <!-- Impact -->
+        <table class="details-table">
+            <tr><th>Impact</th><td>{{ report_item.attrs.impact }}</td></tr>
+        </table>
+        <br>
+        {% endfor %}
 
         <!-- Footer Section -->
-        <div class="footer">
-            <p class="footer_text">© 2024 AfricaCERT. All rights reserved. | Contact: info@africacert.org</p>
-        </div>
+        <table class="footer-table">
+            <tr>
+                <td class="footer-text">© 2024 AfricaCERT. All rights reserved. | Contact: info@africacert.org</td>
+            </tr>
+        </table>
     </div>
 </body>
 </html>
